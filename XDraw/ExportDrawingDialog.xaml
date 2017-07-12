@@ -1,0 +1,34 @@
+﻿<Window x:Class="remes.XDraw.ExportDrawingDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    
+        Title="Export drawing" x:Uid="ExportDrawingDialog"
+        Height="400" Width="600" Icon="XDraw.ico">
+  
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    
+    <ToolBarTray Grid.Row="0">
+      <ToolBar Band="0">
+        <Button Content="Close" IsCancel="True" x:Name="btnClose" x:Uid="toolbar.Close"/>
+        <Button Content="Copy" x:Name="btnCopy" x:Uid="toolbar.Copy" Click="btnCopy_Click"/>
+        <Separator/>
+        <RadioButton Content="Canvas" x:Name="btnFormatCanvas" x:Uid="toolbar.Format.Canvas" Click="btnFormat_Click"/>
+        <RadioButton Content="Drawing image" IsChecked="True" x:Name="btnFormatDrawingImage" x:Uid="toolbar.Format.DrawingImage" Click="btnFormat_Click"/>
+      </ToolBar>
+    </ToolBarTray>
+    
+    <TextBox Grid.Row="1" IsReadOnly="True" x:Name="xmlCode" FontFamily="Courier New"
+             HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+    
+    <CheckBox Grid.Row="2" Content="Use Geometry mini language for path geometries" IsChecked="True" 
+              x:Name="chkUseGeomMiniLang" Margin="3" Click="chkUseGeomMiniLang_Click"/>
+    
+    <TextBlock Grid.Row="3" Text="Select output format and copy XAML code to clipboard." Margin="3"/>
+  </Grid>
+</Window>

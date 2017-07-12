@@ -1,0 +1,116 @@
+﻿<Window x:Class="remes.ASCOT.AdvancedServices.DockingWindow.ASCOTDockingWindow"
+        x:Uid="ASCOTDockingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rWinCtrl="clr-namespace:remes.Windows.Controls;assembly=WpfTools"
+        xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
+        xmlns:ascotStates="clr-namespace:remes.ASCOT.States;assembly=ASCOTCore"
+        xmlns:rWinData="clr-namespace:remes.Windows.Data;assembly=WpfTools"
+        Background="{Binding ElementName=dockingManager, Path=Background}"
+        Height="600" Width="900" 
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        Closed="Window_Closed">
+  
+  <Window.Resources>
+    <ResourceDictionary x:Uid="ASCOTDockingWindowResDict">
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/AvalonDock.Themes;component/themes/dev2010.xaml" x:Uid="adDev2010Theme"/>
+        <ResourceDictionary Source="DockingWindowTheme.xaml" x:Uid="DockingWindowTheme"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+
+  <DockPanel x:Name="outerPanel" x:Uid="outerPanel">
+    <DockPanel DockPanel.Dock="Top" x:Name="headerpanel" x:Uid="headerpanel">
+      <!-- remes logo -->
+      <Border DockPanel.Dock="Right" VerticalAlignment="Stretch" Padding="1" x:Name="logoBorder" x:Uid="logoBorder"
+              BorderThickness="1" BorderBrush="Gray" Background="Snow" MouseLeftButtonUp="RemesLogo_MouseLeftButtonUp">
+        <Image VerticalAlignment="Top" x:Name="remesLogo" x:Uid="remesLogo"
+               Source="{StaticResource remesLogo}" Width="70" Stretch="Uniform"/>
+      </Border>
+
+      <StackPanel Orientation="Vertical" x:Name="menuPanel" x:Uid="menuPanel">
+        <!-- main menu -->
+        <Menu x:Name="mainMenu" x:Uid="mainMenu" rWinCtrl:MergeMenus.Id="MainMenu">
+
+          <!-- file menu (priority 0) -->
+          <MenuItem Header="_File" x:Name="fileMenuItem" x:Uid="fileMenuItem"
+                    rWinCtrl:MergeMenus.Id="FileMenu" rWinCtrl:MergeMenus.Priority="0">
+
+            <MenuItem Header="_Exit" x:Name="exitMenuItem" x:Uid="exitMenuItem" Click="ExitMenuItem_Click" 
+                      rWinCtrl:MergeMenus.Priority="100000" />
+          </MenuItem>
+
+          <!-- place edit menu here (priority 100) -->
+
+          <!-- view menu (priority 200) -->
+          <MenuItem Header="_View" x:Name="viewMenuItem" x:Uid="viewMenuItem"
+                    rWinCtrl:MergeMenus.Id="ViewMenu" rWinCtrl:MergeMenus.Priority="200">
+          </MenuItem>
+
+          <!-- help menu (priority 1000000) -->
+          <MenuItem Header="_Help" x:Name="helpMenu" x:Uid="helpMenu"
+                    rWinCtrl:MergeMenus.Id="HelpMenu" rWinCtrl:MergeMenus.Priority="100000">
+
+            <MenuItem Header="_About" x:Name="aboutMenuItem" x:Uid="aboutMenuItem" 
+                      rWinCtrl:MergeMenus.Priority="100000" Click="AboutMenuItem_Click"/>
+          </MenuItem>
+        </Menu>
+
+        <!-- tool bars -->
+        <ToolBarTray x:Name="toolBarTray" x:Uid="ToolBarTray"
+                     rWinCtrl:MergeMenus.Id="MainToolBarTray">
+                     
+
+          <!-- default toolbar -->
+          <ToolBar Band="0" x:Name="defaultToolBar" rWinCtrl:MergeMenus.Id="DefaultToolBar" x:Uid="DefaultToolBar">
+
+          </ToolBar>
+        </ToolBarTray>
+      </StackPanel>
+    </DockPanel>
+
+    <!--ascotStates:ASCOTStatesPanel DockPanel.Dock="Bottom" States="{Binding Source={x:Static ascotStates:StateManager.Instance}, Path=States}"/-->
+
+    <ItemsControl x:Uid="statesListPanel" x:Name="statesListPanel" DockPanel.Dock="Bottom" 
+                ItemsSource="{Binding Source={x:Static ascotStates:StateManager.Instance}, Path=States}">
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate x:Uid="ItemsPanelTemplate_1">
+          <WrapPanel x:Uid="WrapPanel_1"/>
+        </ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+
+      <ItemsControl.Resources>
+        <rWinData:BoolVisibilityConverter x:Uid="rWinData:BoolVisibilityConverter_1" x:Key="BoolVisibilityConverter"/>
+
+        <DataTemplate x:Uid="DataTemplate_1" DataType="{x:Type ascotStates:ASCOTState}">
+          <Border x:Uid="border" BorderBrush="Blue" Background="White" BorderThickness="1" CornerRadius="3" Margin="1" Padding="2,1" x:Name="border"
+                Visibility="{Binding Path=IsVisible, Converter={StaticResource BoolVisibilityConverter}, ConverterParameter=Collapsed}">
+            <StackPanel x:Uid="innerPanel" Orientation="Horizontal" x:Name="innerPanel">
+              <StackPanel.Resources>
+                <Style x:Uid="Style_1" TargetType="{x:Type TextBlock}">
+                  <!--Setter x:Uid="Setter_1" Property="FontSize" Value="16"/-->
+                  <Setter x:Uid="Setter_2" Property="VerticalAlignment" Value="Center"/>
+                </Style>
+              </StackPanel.Resources>
+              <ascotStates:ASCOTStateIconControl x:Uid="icon" State="{Binding}" Width="16" Height="16" x:Name="icon"/>
+              <ascotStates:ASCOTStateTextControl x:Uid="text" State="{Binding}" Margin="3,0" x:Name="text"/>
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.Resources>
+    </ItemsControl>
+
+    <!-- docking framework -->
+    <ad:DockingManager x:Name="dockingManager" x:Uid="dockingManager" ActiveDocumentChanged="DockingManager_ActiveDocumentChanged">
+      <ad:ResizingPanel Orientation="Horizontal" x:Name="dockPanelH1" x:Uid="dockPanelH1">
+
+        <ad:DocumentPane x:Name="documentsPane" x:Uid="documentsPane">
+
+        </ad:DocumentPane>
+
+      </ad:ResizingPanel>
+    </ad:DockingManager>
+  </DockPanel>
+</Window>

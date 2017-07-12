@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="remes.XDraw.BrushEditControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <UserControl.Resources>
+    <Grid x:Key="GradientStopControl" >
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      
+      <ScrollViewer Grid.Column="0" MaxHeight="100" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+        <ItemsControl HorizontalContentAlignment="Stretch" ItemsSource="{Binding Path=GradientStops}">
+          <ItemsControl.Resources>
+            <DataTemplate DataType="{x:Type GradientStop}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Stop" Margin="0,0,3,0" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Tag="{Binding Path=.}" Click="SelectGradientStopColor_Click">
+                  <Button.Content>
+                    <Rectangle Width="12" Height="12">
+                      <Rectangle.Fill>
+                        <SolidColorBrush Color="{Binding Path=Color}"/>
+                      </Rectangle.Fill>
+                    </Rectangle>
+                  </Button.Content>
+                </Button>
+                <TextBlock Grid.Column="2" Text="Offset" Margin="3,0,3,0" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="3" Text="{Binding Path=Offset}" HorizontalAlignment="Stretch"/>
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.Resources>
+        </ItemsControl>
+      </ScrollViewer>
+      
+      <ToolBarTray Grid.Column="1" Orientation="Vertical">
+        <ToolBar Band="0">
+          <Button Width="20" Height="20" ToolTip="Adds a gradient stop" x:Name="btnAddGradientStop" Click="btnAddGradientStop_Click">
+            <Button.Content>
+              <Image Source="{StaticResource AddImage}"/>
+            </Button.Content>
+          </Button>
+          <Button Width="20" Height="20" ToolTip="Removes the last gradient stop" x:Name="btnRemoveGradientStop" Click="btnRemoveGradientStop_Click">
+            <Button.Content>
+              <Image Source="{StaticResource RemoveImage}"/>
+            </Button.Content>
+          </Button>
+        </ToolBar>
+      </ToolBarTray>
+    </Grid>
+  </UserControl.Resources>
+  
+  <Expander x:Name="expander">
+    <Expander.Header>
+      <StackPanel Orientation="Horizontal">
+        <Rectangle Margin="3" Width="16" Height="16"
+                   Stroke="Black" StrokeThickness="1" RadiusX="2" RadiusY="2"
+                   Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Brush}"/>
+        <TextBlock Margin="3" HorizontalAlignment="Center" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Text}"/>
+      </StackPanel>
+    </Expander.Header>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      
+      <ToolBar Grid.Row="0" ButtonBase.Click="BrushType_Click">
+        <RadioButton ToolTip="Empty brush" x:Name="rdoEmptyBrush">
+          <Rectangle Width="16" Height="16" Stroke="Black" StrokeThickness="1" RadiusX="2" RadiusY="2"/>
+        </RadioButton>
+        <RadioButton ToolTip="Solid brush" x:Name="rdoSolidColorBrush">
+          <Rectangle Width="16" Height="16" Stroke="Black" StrokeThickness="1" RadiusX="2" RadiusY="2" Fill="Blue"/>
+        </RadioButton>
+        <RadioButton ToolTip="Linear gradient brush" x:Name="rdoLinearGradientBrush">
+          <Rectangle Width="16" Height="16" Stroke="Black" StrokeThickness="1" RadiusX="2" RadiusY="2">
+            <Rectangle.Fill>
+              <LinearGradientBrush StartPoint="0,1" EndPoint="1,1">
+                <GradientStop Offset="0" Color="Blue"/>
+                <GradientStop Offset="1" Color="White"/>
+              </LinearGradientBrush>
+            </Rectangle.Fill>
+          </Rectangle>
+        </RadioButton>
+        <RadioButton ToolTip="Radial gradient brush" x:Name="rdoRadialGradientBrush">
+          <Rectangle Width="16" Height="16" Stroke="Black" StrokeThickness="1" RadiusX="2" RadiusY="2">
+            <Rectangle.Fill>
+              <RadialGradientBrush Center="0.5,0.5">
+                <GradientStop Offset="0" Color="Blue"/>
+                <GradientStop Offset="1" Color="White"/>
+              </RadialGradientBrush>
+            </Rectangle.Fill>
+          </Rectangle>
+        </RadioButton>
+      </ToolBar>
+      
+      <Grid Grid.Row="1" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Brush}">
+        <Grid.Resources>
+          <DataTemplate DataType="{x:Type SolidColorBrush}">
+            <Button ToolTip="Choose color" Click="SelectSolidColor_Click">
+              <Button.Content>
+                <Rectangle Width="16" Height="16" Stroke="Black" StrokeThickness="1" RadiusX="2" RadiusY="2"
+                           Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Brush}"/>
+              </Button.Content>
+            </Button>
+          </DataTemplate>
+
+          <DataTemplate DataType="{x:Type LinearGradientBrush}">
+            <StackPanel Orientation="Vertical">
+              <ContentPresenter Content="{StaticResource GradientStopControl}" 
+                                DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Brush}"/>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Start point" Margin="3,0" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=StartPoint}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="End point" Margin="3,0" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=EndPoint}"/>
+              </Grid>
+            </StackPanel>
+          </DataTemplate>
+
+          <DataTemplate DataType="{x:Type RadialGradientBrush}">
+            <StackPanel Orientation="Vertical">
+              <ContentPresenter Content="{StaticResource GradientStopControl}"
+                                 DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=Brush}"/>
+              <Grid>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Center" Margin="3,0" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Center}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Origin" Margin="3,0" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=GradientOrigin}"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Radius X" Margin="3,0" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path=RadiusX}"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Radius Y" Margin="3,0" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path=RadiusY}"/>
+              </Grid>
+            </StackPanel>
+          </DataTemplate>
+        </Grid.Resources>
+        
+        <ContentPresenter Content="{Binding Path=.}"/>
+      </Grid>
+    </Grid>
+  </Expander>
+</UserControl>

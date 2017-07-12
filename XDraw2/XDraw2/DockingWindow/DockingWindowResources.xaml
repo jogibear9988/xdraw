@@ -1,0 +1,14 @@
+﻿<ResourceDictionary x:Class="remes.ASCOT.AdvancedServices.DockingWindow.DockingWindowResources" 
+                    x:Uid="DockingWindowResources"
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rWinCtrl="clr-namespace:remes.Windows.Controls;assembly=WpfTools">
+
+  <MenuItem x:Name="showStartPageMenuItem"
+            x:Key="showStartPageMenuItem"
+            x:Uid="showStartPageMenuItem"
+            Header="Start page" 
+            rWinCtrl:MergeMenus.HostId="ViewMenu" rWinCtrl:MergeMenus.Priority="500"
+            Click="ShowStartPageMenuItem_Click"/>
+  
+</ResourceDictionary>

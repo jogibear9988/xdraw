@@ -1,0 +1,40 @@
+﻿<ResourceDictionary x:Uid="DockingWindowThemeResDict" 
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source="/ASCOTCore;component/Themes/generic.xaml" x:Uid="GenericResDict"/>
+    
+    <ResourceDictionary x:Uid="ResDict">
+      <Color x:Key="startPageBackgroundColor" x:Uid="startPageBackgroundColor">#FFFFFFFF</Color>
+      <Color x:Key="dockDocumentBackgroundColor" x:Uid="dockDocumentBackgroundColor">#FFF0F0F0</Color>
+      <Color x:Key="dockWindowBackgroundColor" x:Uid="dockWindowBackgroundColor">#FF9CAAC1</Color>
+
+      <SolidColorBrush x:Key="startPageBackgroundBrush" x:Uid="startPageBackgroundBrush" Color="{StaticResource startPageBackgroundColor}"/>
+      <SolidColorBrush x:Key="dockDocumentBackgroundBrush" x:Uid="dockDocumentBackgroundBrush" Color="{StaticResource dockDocumentBackgroundColor}"/>
+      <SolidColorBrush x:Key="dockWindowBackgroundBrush" x:Uid="dockWindowBackgroundBrush" Color="{StaticResource dockWindowBackgroundColor}"/>
+
+      <LinearGradientBrush x:Key="separatorBrush" x:Uid="separatorBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="{StaticResource startPageBackgroundColor}" Offset="0" x:Uid="separatorBrushStop0"/>
+        <GradientStop Color="{StaticResource remesGrayColor}" Offset="0.3" x:Uid="separatorBrushStop1"/>
+        <GradientStop Color="{StaticResource remesGrayColor}" Offset="0.7" x:Uid="separatorBrushStop2"/>
+        <GradientStop Color="{StaticResource startPageBackgroundColor}" Offset="1" x:Uid="separatorBrushStop3"/>
+      </LinearGradientBrush>
+
+      <Style x:Key="horizontalSeparatorStyle" x:Uid="horizontalSeparatorStyle" TargetType="Rectangle">
+        <Setter Property="HorizontalAlignment" Value="Stretch" x:Uid="horizontalSeparatorStyleSetter1"/>
+        <Setter Property="Height" Value="1" x:Uid="horizontalSeparatorStyleSetter2"/>
+        <Setter Property="Fill" Value="{StaticResource separatorBrush}" x:Uid="horizontalSeparatorStyleSetter3"/>
+        <Setter Property="Margin" Value="0,5" x:Uid="horizontalSeparatorStyleSetter4"/>
+      </Style>
+
+      <Style x:Key="verticalSeparatorStyle" x:Uid="verticalSeparatorStyle" TargetType="Rectangle">
+        <Setter Property="VerticalAlignment" Value="Stretch" x:Uid="verticalSeparatorStyleSetter1"/>
+        <Setter Property="Width" Value="1" x:Uid="verticalSeparatorStyleSetter2"/>
+        <Setter Property="Fill" Value="{StaticResource separatorBrush}" x:Uid="verticalSeparatorStyleSetter3"/>
+        <Setter Property="Margin" Value="5,0" x:Uid="verticalSeparatorStyleSetter4"/>
+      </Style>
+      
+    </ResourceDictionary>
+  </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

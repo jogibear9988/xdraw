@@ -1,0 +1,44 @@
+﻿<Window x:Class="remes.XDraw.AboutDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About XDraw" Width="500"
+    ResizeMode="NoResize" SizeToContent="Height" Loaded="Window_Loaded" Icon="XDraw.ico">
+
+  <Grid Margin="3">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="200"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    
+    <Image Grid.Row="0" Grid.Column="0" Source="{StaticResource XDrawImage}" Stretch="Uniform" Margin="0,0,5,0"/>
+    
+    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
+      <TextBlock Margin="6" TextWrapping="Wrap"
+                 Text="XDraw makes it easier for developers to create XAML vector graphics. It's developed in C# using WPF."/>
+      <TextBlock Margin="3" TextWrapping="Wrap"
+                 Text="Version:"/>
+      <TextBlock Margin="10,0,3,3" TextWrapping="Wrap" x:Name="txtVersion"/>
+      <TextBlock Margin="3" TextWrapping="Wrap"
+                 Text="Author:"/>
+      <TextBlock Margin="10,0,3,3" TextWrapping="Wrap"
+                 Text="Reinhard Ostermeier, remes GmbH"/>
+      <TextBlock Margin="3" TextWrapping="Wrap"
+                 Text="License:"/>
+      <TextBlock Margin="10,0,3,3" TextWrapping="Wrap"
+                 Text="XDraw is released under the MIT License. See license.txt for further details."/>
+    </StackPanel>
+    
+    <Grid Grid.Row="1" Grid.Column="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      
+      <Button Grid.Column="1" Content="Close" IsCancel="True" MinWidth="75" Margin="3" Padding="2,1"/>
+    </Grid>
+  </Grid>
+</Window>

@@ -1,0 +1,42 @@
+﻿<Window x:Class="remes.XDraw.NewProjectDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="New project" Loaded="Window_Loaded" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+
+  <Grid Margin="3">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    
+    <Grid Grid.Row="0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="250"/>
+      </Grid.ColumnDefinitions>
+      
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Column="0" Grid.Row="0" Text="Project name" Margin="3" VerticalAlignment="Center"/>
+      <TextBox Grid.Column="1" Grid.Row="0" x:Name="edtProjectName" Margin="3" TextChanged="ProjectName_TextChanged"/>
+
+      <TextBlock Grid.Column="0" Grid.Row="1" Text="XAML file name" Margin="3" VerticalAlignment="Center"/>
+      <TextBox Grid.Column="1" Grid.Row="1" x:Name="edtXamlFileName" Margin="3"/>
+
+    </Grid>
+    
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      
+      <Button Grid.Column="1" Content="OK" MinWidth="75" Margin="3" Padding="2,1" IsDefault="True" Click="OK_Click"/>
+      <Button Grid.Column="2" Content="Cancel" MinWidth="75" Margin="3" Padding="2,1" IsCancel="True"/>
+    </Grid>
+  </Grid>
+</Window>

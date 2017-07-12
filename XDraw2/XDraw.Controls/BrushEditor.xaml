@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="XDraw.Controls.BrushEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:xdControls="clr-namespace:XDraw.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="200">
+  
+  <DockPanel DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=Brush, Mode=TwoWay}">
+    <ToolBar DockPanel.Dock="Top">
+      <RadioButton Content="X" x:Name="EmptyBrushRadioButton" GroupName="BrushType" Click="BrushTypeRadioButton_Click"/>
+      <RadioButton Content="S" x:Name="SolidBrushRadioButton" GroupName="BrushType" Click="BrushTypeRadioButton_Click"/>
+      <RadioButton Content="L" x:Name="LinearGradientBrushRadioButton" GroupName="BrushType" Click="BrushTypeRadioButton_Click"/>
+      <RadioButton Content="R" x:Name="RadialGradientBrushRadioButton" GroupName="BrushType" Click="BrushTypeRadioButton_Click"/>
+    </ToolBar>
+    
+    <ContentPresenter Content="{Binding}">
+      <ContentPresenter.Resources>
+        <DataTemplate DataType="{x:Type SolidColorBrush}">
+          <xctk:ColorCanvas SelectedColor="{Binding Path=Color, Mode=TwoWay}"/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type LinearGradientBrush}">
+          <xdControls:LinearGradientBrushEditor Brush="{Binding Path=., Mode=TwoWay}"/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type RadialGradientBrush}">
+          <xdControls:RadialGradientBrushEditor Brush="{Binding Path=., Mode=TwoWay}"/>
+        </DataTemplate>
+      </ContentPresenter.Resources>
+    </ContentPresenter>
+  </DockPanel>
+</UserControl>

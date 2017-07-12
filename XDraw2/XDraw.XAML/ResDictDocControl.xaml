@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="XDraw.Xaml.ResDictDocControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xmll="clr-namespace:System.Xml.Linq;assembly=System.Xml.Linq"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+  
+  <UserControl.Resources>
+    <DataTemplate DataType="{x:Type DrawingImage}">
+      <Image Source="{Binding Path=.}" Stretch="Uniform"/>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type xmll:XElement}">
+      <TextBlock Text="{Binding Path=.}" FontSize="6"/>
+    </DataTemplate>
+  </UserControl.Resources>
+
+  <UserControl.CommandBindings>
+    <CommandBinding Command="Cut" Executed="Cut_Executed" CanExecute="Cut_CanExecute"/>
+    <CommandBinding Command="Copy" Executed="Copy_Executed" CanExecute="Copy_CanExecute"/>
+    <CommandBinding Command="Paste" Executed="Paste_Executed" CanExecute="Paste_CanExecute"/>
+    <CommandBinding Command="Delete" Executed="Delete_Executed" CanExecute="Delete_CanExecute"/>
+  </UserControl.CommandBindings>
+  
+  <ListBox x:Name="listBox"
+           DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=.}"
+           ItemsSource="{Binding Path=Document.Items}"
+           SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}"
+           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+    
+    <ListBox.ItemsPanel>
+      <ItemsPanelTemplate>
+        <WrapPanel Orientation="Horizontal" IsItemsHost="True"/>
+      </ItemsPanelTemplate>
+    </ListBox.ItemsPanel>
+
+    <ListBox.ItemContainerStyle>
+      <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+        <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_DoubleClick"/>
+      </Style>
+    </ListBox.ItemContainerStyle>
+    
+    <ListBox.ItemTemplate>
+      <DataTemplate>
+        <Border Margin="2,2,3,3" BorderThickness="1" CornerRadius="3" BorderBrush="DarkGray"
+                Width="80" Height="80">
+          <DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Text="{Binding Path=Key}" TextAlignment="Center" TextWrapping="Wrap" Margin="2"/>
+
+            <Border Background="White">
+              <ContentPresenter Content="{Binding Path=Obj}" TextBlock.FontSize="7" TextBlock.Foreground="Black" Margin="2"/>
+            </Border>
+          </DockPanel>
+        </Border>
+      </DataTemplate>
+    </ListBox.ItemTemplate>
+    
+  </ListBox>
+  
+  
+</UserControl>

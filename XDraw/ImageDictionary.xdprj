@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XDrawProject>
+  <FileVersion>1.0</FileVersion>
+  <ProjectName>XDraw ImageDictionary</ProjectName>
+  <DefaultExportFormat>DrawingImage</DefaultExportFormat>
+  <XAMLFilePath>ImageDictionary.xaml</XAMLFilePath>
+  <Drawings>
+    <Drawing Name="ZoomInImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="ZoomOutImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="Zoom1Image">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="LoadDrawingImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="SaveDrawingImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="NewDrawingImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="DeleteShapeImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="SelectToolImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="EditToolImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="LineToolImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="RectangleToolImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="EllipseToolImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="PathToolImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="ShowGridImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="PointGridModeImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="SnapToGridImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="GridOptionsImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="AddImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="RemoveImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="ExportImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="ImportImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="InsertPointBeforeImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="InsertPointAfterImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="DeletePointImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="CloseImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="XDrawImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="DrawingImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="CopyDrawingImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="LineSegmentImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="ArcSegmentImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="QuadraticBezierSegmentImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="BezierSegmentImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="TextToolImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="CutImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="CopyImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="PasteImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="SendToBackImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="OneToBackImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="OneToFrontImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+    <Drawing Name="SendToFrontImage">
+      <ExportFormat>DrawingImage</ExportFormat>
+      <DrawingSize>100,100</DrawingSize>
+      <SaveDrawingSize>False</SaveDrawingSize>
+    </Drawing>
+  </Drawings>
+</XDrawProject>

@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="XDraw.Controls.PenEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xDrawControls="clr-namespace:XDraw.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="250">
+  
+  <UserControl.Resources>
+    <DrawingImage x:Key="UpArrow">
+      <DrawingImage.Drawing>
+        <DrawingGroup>
+          <GeometryDrawing>
+            <GeometryDrawing.Brush>
+              <SolidColorBrush Color="Black"/>
+            </GeometryDrawing.Brush>
+            <GeometryDrawing.Geometry>
+              <PathGeometry Figures="M 0,5 L 5,0 L 10,5 Z" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+        </DrawingGroup>
+      </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="DownArrow">
+      <DrawingImage.Drawing>
+        <DrawingGroup>
+          <GeometryDrawing>
+            <GeometryDrawing.Brush>
+              <SolidColorBrush Color="Black"/>
+            </GeometryDrawing.Brush>
+            <GeometryDrawing.Geometry>
+              <PathGeometry Figures="M 0,0 L 5,5 L 10,0 Z" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+        </DrawingGroup>
+      </DrawingImage.Drawing>
+    </DrawingImage>
+  </UserControl.Resources>
+  
+  <DockPanel DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=Pen}">
+    
+    <Grid DockPanel.Dock="Bottom">
+      
+      <Grid.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+          <Setter Property="Margin" Value="3,1"/>
+          <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="{x:Type TextBox}">
+          <Setter Property="Margin" Value="3,1"/>
+          <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+      </Grid.Resources>
+      
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="Thickness"/>
+      <Grid Grid.Row="0" Grid.Column="1">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="17"/>
+          <ColumnDefinition Width="17"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <TextBox Grid.RowSpan="2" Grid.Column="0" Text="{Binding Path=Thickness, ValidatesOnExceptions=True}"/>
+        
+        <RepeatButton Grid.Row="0" Grid.Column="1" x:Name="ThicknessMajorUpButton"
+                Click="ThicknessMajorUpButton_Click">
+          <Image Source="{StaticResource UpArrow}" Stretch="None"/>
+        </RepeatButton>
+        <RepeatButton Grid.Row="1" Grid.Column="1" x:Name="ThicknessMajorDownButton"
+                Click="ThicknessMajorDownButton_Click">
+          <Image Source="{StaticResource DownArrow}" Stretch="None"/>
+        </RepeatButton>
+
+        <RepeatButton Grid.Row="0" Grid.Column="2" x:Name="ThicknessMinorUpButton"
+                Click="ThicknessMinorUpButton_Click">
+          <Image Source="{StaticResource UpArrow}" Stretch="None"/>
+        </RepeatButton>
+        <RepeatButton Grid.Row="1" Grid.Column="2" x:Name="ThicknessMinorDownButton"
+                Click="ThicknessMinorDownButton_Click">
+          <Image Source="{StaticResource DownArrow}" Stretch="None"/>
+        </RepeatButton>
+      </Grid>
+    </Grid>
+
+    <xDrawControls:BrushEditor Brush="{Binding Path=Brush, Mode=TwoWay}">
+      
+    </xDrawControls:BrushEditor>
+  </DockPanel>
+</UserControl>

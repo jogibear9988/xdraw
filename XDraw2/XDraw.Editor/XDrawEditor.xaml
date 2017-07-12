@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="XDraw.Editor.XDrawEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:my="clr-namespace:XDraw.Editor"
+             xmlns:xdCore="clr-namespace:XDraw;assembly=XDraw2.Core"
+             xmlns:media="clr-namespace:XDraw.Controls.Media;assembly=XDraw.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             
+             DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=.}"
+             PreviewMouseWheel="UserControl_PreviewMouseWheel"
+             Focusable="True">
+
+  <UserControl.Resources>
+    <Style x:Key="selectionRectDefaultStyle" TargetType="{x:Type media:ScreenSpaceRectangle2}">
+      <Setter Property="Stroke" Value="Blue"/>
+      <Setter Property="StrokeDashArray" Value="10 5 2 5"/>
+      <Setter Property="StrokeThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="mouseSelectShapeDefaultStyle" TargetType="{x:Type media:ScreenSpaceShape}">
+      <Setter Property="Stroke" Value="Blue"/>
+      <Setter Property="Fill" Value="LightBlue"/>
+      <Setter Property="StrokeThickness" Value="1"/>
+      <Setter Property="Opacity" Value="0.5"/>
+    </Style>
+
+    <ItemsPanelTemplate x:Key="defaultItemsPanel">
+      <Canvas/>
+    </ItemsPanelTemplate>
+  </UserControl.Resources>
+  
+  <UserControl.CommandBindings>
+    <!-- zooming commads -->
+    <CommandBinding Command="IncreaseZoom" x:Name="increaseZoomCommand" CanExecute="ZoomInCommand_CanExecute" Executed="ZoomInCommand_Executed"/>
+    <CommandBinding Command="DecreaseZoom" x:Name="decreaseZoomCommand" CanExecute="ZoomOutCommand_CanExecute" Executed="ZoomOutCommand_Executed"/>
+    <CommandBinding Command="{x:Static my:XDrawEditorCommands.ZoomInCommand}" x:Name="zoomInCommand" CanExecute="ZoomInCommand_CanExecute" Executed="ZoomInCommand_Executed"/>
+    <CommandBinding Command="{x:Static my:XDrawEditorCommands.ZoomOutCommand}" x:Name="zoomOutCommand" CanExecute="ZoomOutCommand_CanExecute" Executed="ZoomOutCommand_Executed"/>
+    <CommandBinding Command="{x:Static my:XDrawEditorCommands.ZoomFitCommand}" x:Name="zoomFitCommand" CanExecute="ZoomFitCommand_CanExecute" Executed="ZoomFitCommand_Executed"/>
+    <CommandBinding Command="{x:Static my:XDrawEditorCommands.Zoom1Command}" x:Name="zoom1Command" CanExecute="Zoom1Command_CanExecute" Executed="Zoom1Command_Executed"/>
+    
+    <!-- editing commands -->
+    <CommandBinding Command="Delete" x:Name="deleteSelectedCommand" CanExecute="DeleteSelectedCommand_CanExecute" Executed="DeleteSelectedCommand_Executed"/>
+  </UserControl.CommandBindings>
+  
+  <ScrollViewer x:Name="scrollViewer"                
+                HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible"
+                SizeChanged="ScrollViewer_SizeChanged" 
+                PreviewMouseDown="DrawingCanvas_PreviewMouseDown"
+                PreviewMouseUp="DrawingCanvas_PreviewMouseUp"
+                PreviewMouseMove="DrawingCanvas_PreviewMouseMove"
+                AllowDrop="True"
+                DragOver="Workspace_DragOver"
+                Drop="Workspace_Drop">
+
+    <media:ScreenSpaceGrid x:Name="workspace"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"                           
+                           Width="{Binding Path=WorkspaceWidth}"
+                           Height="{Binding Path=WorkspaceHeight}"
+                           Background="{Binding Path=WorkspaceBrush}">
+
+      <Canvas x:Name="backgroundCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+      <ItemsControl x:Name="canvas" 
+                    ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=Companions}"
+                    ItemsPanel="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=ItemsPanel}">
+        <ItemsControl.Resources>
+          <DataTemplate DataType="{x:Type xdCore:Companion}">
+            <ContentPresenter Content="{Binding Path=FrameworkElement}"/>
+          </DataTemplate>
+        </ItemsControl.Resources>
+      </ItemsControl>
+
+      <Canvas x:Name="foregroundCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+      <ItemsControl x:Name="customGripperCanvas" 
+                    ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=CustomGrippers}">
+        <ItemsControl.Resources>
+          <DataTemplate DataType="{x:Type xdCore:Gripper}">
+            <ContentPresenter Content="{Binding Path=.}"/>
+          </DataTemplate>
+        </ItemsControl.Resources>
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <Canvas/>
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+      </ItemsControl>
+
+    </media:ScreenSpaceGrid>
+  </ScrollViewer>
+</UserControl>

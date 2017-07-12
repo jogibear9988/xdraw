@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="XDraw.PropertiesToolPane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:xdCore="clr-namespace:XDraw;assembly=XDraw2.Core"
+             xmlns:xdCtrl="clr-namespace:XDraw.Controls;assembly=XDraw.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+  <xctk:PropertyGrid SelectedObject="{Binding Source={x:Static xdCore:XDrawCore.Instance}, Path=PropertiesObject}">
+    <xctk:PropertyGrid.EditorDefinitions>
+
+      <xctk:EditorDefinition TargetType="{x:Type Brush}">
+        <xctk:EditorDefinition.EditorTemplate>
+          <DataTemplate>
+            <xctk:DropDownButton HorizontalContentAlignment="Stretch">
+              <xctk:DropDownButton.Content>
+                <Border Height="16.0" BorderThickness="1.0" BorderBrush="Black"
+                        Background="{Binding Path=Value}"/>
+              </xctk:DropDownButton.Content>
+              <xctk:DropDownButton.DropDownContent>
+                <xdCtrl:BrushEditor Brush="{Binding Path=Value, Mode=TwoWay}"/>
+              </xctk:DropDownButton.DropDownContent>
+            </xctk:DropDownButton>
+          </DataTemplate>
+        </xctk:EditorDefinition.EditorTemplate>
+      </xctk:EditorDefinition>
+
+      <xctk:EditorDefinition TargetType="{x:Type Pen}">
+        <xctk:EditorDefinition.EditorTemplate>
+          <DataTemplate>
+            <xctk:DropDownButton HorizontalContentAlignment="Stretch" >
+              <xctk:DropDownButton.Content>
+                <Line Height="16.0" X1="0.0" Y1="8.0" X2="500.0" Y2="8.0"
+                      StrokeDashCap="{Binding Path=Value.DashCap}"
+                      StrokeDashArray="{Binding Path=Value.DashStyle.Dashes}"
+                      StrokeDashOffset="{Binding Path=Value.DashStyle.Offset}"
+                      StrokeStartLineCap="{Binding Path=Value.StartLineCap}"
+                      StrokeEndLineCap="{Binding Path=Value.EndLineCap}"
+                      StrokeLineJoin="{Binding Path=Value.LineJoin}"
+                      StrokeMiterLimit="{Binding Path=Value.MiterLimit}"
+                      StrokeThickness="{Binding Path=Value.Thickness}"
+                      Stroke="{Binding Path=Value.Brush}"/>
+              </xctk:DropDownButton.Content>
+              <xctk:DropDownButton.DropDownContent>
+                <xdCtrl:PenEditor Pen="{Binding Path=Value, Mode=TwoWay}"/>
+              </xctk:DropDownButton.DropDownContent>
+            </xctk:DropDownButton>
+          </DataTemplate>
+        </xctk:EditorDefinition.EditorTemplate>
+      </xctk:EditorDefinition>
+
+    </xctk:PropertyGrid.EditorDefinitions>
+  </xctk:PropertyGrid>
+</UserControl>

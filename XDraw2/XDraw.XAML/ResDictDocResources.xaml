@@ -1,0 +1,16 @@
+﻿<ResourceDictionary x:Class="XDraw.Xaml.ResDictDocResources" 
+                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xdCore="clr-namespace:XDraw;assembly=XDraw2.Core"
+                    xmlns:xdXaml="clr-namespace:XDraw.Xaml">
+
+  <ToolBar x:Key="ResDictDocToolBar" 
+           xdCore:MergeMenus.HostId="ToolBarTray" xdCore:MergeMenus.Id="ResDictDocToolBar"
+           Visibility="{Binding Source={x:Static xdXaml:ResDictDocResources.Instance}, Path=ActiveResDictDoc, Converter={x:Static xdCore:ValueConverters.ObjectNotNullVisibity}}">
+    <Button xdCore:MergeMenus.Priority="10"
+            ToolTip="Add new drawing" 
+            Command="{Binding Source={x:Static xdXaml:ResDictDocResources.Instance}, Path=ActiveResDictDoc.AddDrawingCommand}">
+      +
+    </Button>
+  </ToolBar>
+</ResourceDictionary>

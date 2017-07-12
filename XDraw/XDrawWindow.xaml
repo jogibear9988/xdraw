@@ -1,0 +1,1051 @@
+﻿<Window x:Class="remes.XDraw.XDrawWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:remes.XDraw"
+        Title="XDraw" Height="800" Width="1000"
+        x:Name="xDrawWindow" x:Uid="xDraw.Window"
+        Loaded="Window_Loaded" Closing="Window_Closing"
+        Icon="XDraw.ico">
+
+  <Grid>
+    <Grid.Resources>
+      <ObjectDataProvider x:Key="penLineCapValues"
+                      MethodName="GetValues" 
+                      ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+          <x:Type TypeName="PenLineCap"/>
+        </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider x:Key="penLineJoinValues"
+                      MethodName="GetValues" 
+                      ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+          <x:Type TypeName="PenLineJoin" />
+        </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider x:Key="sweepDirectionValues"
+                          MethodName="GetValues" 
+                          ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+          <x:Type TypeName="SweepDirection"/>
+        </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider x:Key="exportFormatValues"
+                          MethodName="GetValues" 
+                          ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+          <x:Type TypeName="local:XDrawingExportFormat"/>
+        </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider x:Key="textAlignmentValues"
+                          MethodName="GetValues" 
+                          ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+          <x:Type TypeName="TextAlignment"/>
+        </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+
+      <ObjectDataProvider x:Key="textTrimmingValues"
+                          MethodName="GetValues" 
+                          ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider.MethodParameters>
+          <x:Type TypeName="TextTrimming"/>
+        </ObjectDataProvider.MethodParameters>
+      </ObjectDataProvider>
+    </Grid.Resources>
+
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Menu -->
+    <Menu Grid.Row="0">
+      <MenuItem Header="_File" x:Uid="menu.File">
+        <MenuItem Header="_New project" x:Uid="menu.File.New" Click="btnNew_Click">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource NewDrawingImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_Load" x:Uid="menu.File.Load" Click="btnLoad_Click">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource LoadDrawingImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_Save" x:Uid="menu.File.Save" Click="btnSave_Click">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource SaveDrawingImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="_Exit" x:Name="miExit" x:Uid="menu.File.Exit" Click="Exit_Click"/>
+      </MenuItem>
+
+      <MenuItem Header="_Edit" x:Uid="menu.Edit">
+        <MenuItem Header="Cu_t" x:Uid="menu.Edit.Cut" Command="ApplicationCommands.Cut">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Source="{StaticResource CutImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_Copy" x:Uid="menu.Edit.Copy" Command="ApplicationCommands.Copy">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Source="{StaticResource CopyImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_Paste" x:Uid="menu.Edit.Paste" Command="ApplicationCommands.Paste">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Source="{StaticResource PasteImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="_Remove shape" Command="ApplicationCommands.Delete">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Source="{StaticResource DeleteShapeImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="Send to bac_k" x:Uid="menu.Edit.SendToBack" Command="{x:Static local:XDrawingCommands.SendToBack}">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Source="{StaticResource SendToBackImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="One to _back" x:Uid="menu.Edit.OneToBack" Command="{x:Static local:XDrawingCommands.OneToBack}">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Source="{StaticResource OneToBackImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="One to _front" x:Uid="menu.Edit.OneToFront" Command="{x:Static local:XDrawingCommands.OneToFront}">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Source="{StaticResource OneToFrontImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="Send to fr_ont" x:Uid="menu.Edit.SendToFront" Command="{x:Static local:XDrawingCommands.SendToFront}">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Source="{StaticResource SendToFrontImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+      </MenuItem>
+
+      <MenuItem Header="_View" x:Uid="menu.View">
+        <MenuItem Header="_Small buttons" IsCheckable="True" IsChecked="True" 
+                  x:Name="miSmallButtons" x:Uid="menu.View.SmallButtons" Click="miSmallButtons_Click"/>
+        <MenuItem Header="_Large buttons" IsCheckable="True" IsChecked="False" 
+                  x:Name="miLargeButtons" x:Uid="menu.View.LargeButtons" Click="miLargeButtons_Click"/>
+      </MenuItem>
+
+      <MenuItem Header="_Tools" x:Uid="menu.Tools">
+        <!--MenuItem Header="_Select shape" x:Uid="menu.Tools.SelectShape" Click="btnSelect_Click"
+                  x:Name="miSelect" IsCheckable="True">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource SelectToolImage}"/>
+          </MenuItem.Icon>
+        </MenuItem-->
+        <MenuItem Header="_Edit shape" x:Uid="menu.Tools.EditShape" Click="btnEdit_Click"
+                x:Name="miEdit" IsCheckable="True">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                 Source="{StaticResource EditToolImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <Separator/>
+        <MenuItem Header="_New line" x:Uid="menu.Tools.NewLine" Click="btnNewLine_Click"
+                  x:Name="miNewLine" IsCheckable="True">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource LineToolImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_New rectangle" x:Uid="menu.Tools.NewRectangle" Click="btnNewRect_Click"
+                  x:Name="miNewRect" IsCheckable="True">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource RectangleToolImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_New ellipse" x:Uid="menu.Tools.NewEllipse" Click="btnNewEllipse_Click"
+                  x:Name="miNewEllipse" IsCheckable="True">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource EllipseToolImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_New path" x:Uid="menu.Tools.NewPath" Click="btnNewPath_Click"
+                  x:Name="miNewPath" IsCheckable="True">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource PathToolImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        <MenuItem Header="_New text" x:Uid="menu.Tools.NewText" Click="btnNewText_Click"
+                  x:Name="miNewText" IsCheckable="True">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource TextToolImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+      </MenuItem>
+
+      <MenuItem Header="_Help" x:Uid="menu.Help">
+        <MenuItem Header="_About XDraw ..." x:Name="miAbout" x:Uid="menu.Help.About" Click="miAbout_Click">
+          <MenuItem.Icon>
+            <Image Height="16" Width="16" Stretch="Uniform" 
+                   Source="{StaticResource XDrawImage}"/>
+          </MenuItem.Icon>
+        </MenuItem>
+      </MenuItem>
+    </Menu>
+
+    <!-- Toolbar -->
+    <ToolBarTray Grid.Row="1">
+      <ToolBar Band="0">
+        <Button Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                ToolTip="Load project" x:Name="btnLoad" x:Uid="toolbar.File.Load" Click="btnLoad_Click">
+          <Button.Content>
+            <Image Source="{StaticResource LoadDrawingImage}"/>
+          </Button.Content>
+        </Button>
+        <Button Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                ToolTip="Save project" x:Name="btnSave" x:Uid="toolbar.File.Save" Click="btnSave_Click">
+          <Button.Content>
+            <Image Source="{StaticResource SaveDrawingImage}"/>
+          </Button.Content>
+        </Button>
+        <Separator/>
+        <Button Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                ToolTip="New project" x:Name="btnClear" x:Uid="toolbar.File.New" Click="btnNew_Click">
+          <Button.Content>
+            <Image Source="{StaticResource NewDrawingImage}"/>
+          </Button.Content>
+        </Button>
+      </ToolBar>
+      <ToolBar Band="0">
+        <Separator/>
+        <!--CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="Select shape" x:Name="btnSelect" x:Uid="toolbar.Mode.Select" Click="btnSelect_Click">
+          <CheckBox.Content>
+            <Image Source="{StaticResource SelectToolImage}"/>
+          </CheckBox.Content>
+        </CheckBox-->
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="Edit shape" x:Name="btnEdit" x:Uid="toolbar.Mode.Edit" Click="btnEdit_Click">
+          <CheckBox.Content>
+            <Image Source="{StaticResource EditToolImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+        <Separator/>
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="New line" x:Name="btnLine" x:Uid="toolbar.Mode.Line" Click="btnNewLine_Click">
+          <CheckBox.Content>
+            <Image Source="{StaticResource LineToolImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="New rectangle" x:Name="btnRect" x:Uid="toolbar.Mode.Rectangle" Click="btnNewRect_Click">
+          <CheckBox.Content>
+            <Image Source="{StaticResource RectangleToolImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="New ellipse" x:Name="btnEllipse" x:Uid="toolbar.Mode.Ellipse" Click="btnNewEllipse_Click">
+          <CheckBox.Content>
+            <Image Source="{StaticResource EllipseToolImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="new path" x:Name="btnPath" x:Uid="toolbar.Mode.Path" Click="btnNewPath_Click">
+          <CheckBox.Content>
+            <Image Source="{StaticResource PathToolImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="new text" x:Name="btnText" x:Uid="toolbar.Mode.Text" Click="btnNewText_Click">
+          <CheckBox.Content>
+            <Image Source="{StaticResource TextToolImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+      </ToolBar>
+
+      <ToolBar Band="0">
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="Toggels if the grid is shown" 
+                  IsChecked="{Binding ElementName=tab, Path=SelectedItem.DataContext.Drawing.IsGridVisible}">
+          <CheckBox.Content>
+            <Image Source="{StaticResource ShowGridImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="Toggels between point and line grid" 
+                  IsChecked="{Binding ElementName=tab, Path=SelectedItem.DataContext.Drawing.PointGridMode}">
+          <CheckBox.Content>
+            <Image Source="{StaticResource PointGridModeImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+        <Separator/>
+        <CheckBox Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                  ToolTip="Toggels if the snap to grid is enabled" 
+                  IsChecked="{Binding ElementName=tab, Path=SelectedItem.DataContext.Drawing.IsSnapToGridEnabled}">
+          <CheckBox.Content>
+            <Image Source="{StaticResource SnapToGridImage}"/>
+          </CheckBox.Content>
+        </CheckBox>
+        <Separator/>
+        <Button Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                ToolTip="Shows the dialog with the grid options" Click="GridOptions_Click">
+          <Button.Content>
+            <Image Source="{StaticResource GridOptionsImage}"/>
+          </Button.Content>
+        </Button>
+
+        <Separator/>
+        <Button Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                ToolTip="Zooms into the drawing by 25%" Click="ZoomIn_Click">
+          <Button.Content>
+            <Image Source="{StaticResource ZoomInImage}"/>
+          </Button.Content>
+        </Button>
+        <Button Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                ToolTip="Zooms out of the drawing by 25%" Click="ZoomOut_Click">
+          <Button.Content>
+            <Image Source="{StaticResource ZoomOutImage}"/>
+          </Button.Content>
+        </Button>
+        <Button Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:XDrawWindow}}, Path=ToolbarButtonSize}" 
+                ToolTip="Zooms the drawing to 100%" Click="Zoom1_Click">
+          <Button.Content>
+            <Image Source="{StaticResource Zoom1Image}"/>
+          </Button.Content>
+        </Button>
+      </ToolBar>
+    </ToolBarTray>
+
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="200"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="200"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- Drawing shape properties -->
+      <GridSplitter Grid.Column="0" HorizontalAlignment="Right" Width="3"/>
+      <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,3,0">
+        <StackPanel Grid.Column="0" Orientation="Vertical"
+                    DataContext="{Binding ElementName=tab, Path=SelectedItem.DataContext.Drawing.SelectedShape}">
+          <Border BorderBrush="Blue" BorderThickness="1" CornerRadius="5" Margin="1">
+            <Expander IsExpanded="True">
+              <Expander.Header>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Grid.Column="0" Text="Stroke" VerticalAlignment="Center" Margin="3,0"/>
+                  <Line Grid.Column="1" X1="0" Y1="0" X2="1" Y2="0"  VerticalAlignment="Center" Margin="3,0"
+                        Stretch="Fill"
+                        Stroke="{Binding Path.Stroke, Mode=TwoWay}" 
+                        StrokeThickness="{Binding Path.StrokeThickness, Mode=TwoWay}"/>
+                </Grid>
+              </Expander.Header>
+              <StackPanel Orientation="Vertical">
+                <Grid Margin="3">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Thickness" Margin="3,0" VerticalAlignment="Center"/>
+                  <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path.StrokeThickness}" Margin="3,0"/>
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Dash" Margin="3,0" VerticalAlignment="Center"/>
+                  <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding StrokeDash}" Margin="3,0"/>
+                  <TextBlock Grid.Row="2" Grid.Column="0" Text="Dash cap" Margin="3,0" VerticalAlignment="Center"/>
+                  <ComboBox Grid.Row="2" Grid.Column="1" Margin="3,0"
+                            ItemsSource="{Binding Source={StaticResource penLineCapValues}}"
+                            SelectedItem="{Binding Path.StrokeDashCap}"/>
+                  <TextBlock Grid.Row="3" Grid.Column="0" Text="Dash offset" Margin="3,0" VerticalAlignment="Center"/>
+                  <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path.StrokeDashOffset}" Margin="3,0"/>
+                  <TextBlock Grid.Row="4" Grid.Column="0" Text="Line caps" Margin="3,0" VerticalAlignment="Center"/>
+                  <Grid Grid.Row="4" Grid.Column="1" >
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0" Margin="3,0"
+                            ItemsSource="{Binding Source={StaticResource penLineCapValues}}"
+                            SelectedItem="{Binding Path.StrokeStartLineCap}"/>
+                    <ComboBox Grid.Column="1" Margin="3,0"
+                            ItemsSource="{Binding Source={StaticResource penLineCapValues}}"
+                            SelectedItem="{Binding Path.StrokeEndLineCap}"/>
+                  </Grid>
+                  <TextBlock Grid.Row="5" Grid.Column="0" Text="Line join" Margin="3,0" VerticalAlignment="Center"/>
+                  <ComboBox Grid.Row="5" Grid.Column="1" Margin="3,0"
+                            ItemsSource="{Binding Source={StaticResource penLineJoinValues}}"
+                            SelectedItem="{Binding Path.StrokeLineJoin}"/>
+                  <TextBlock Grid.Row="6" Grid.Column="0" Text="Miter limit" Margin="3,0" VerticalAlignment="Center"/>
+                  <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Path.StrokeMiterLimit}" Margin="3,0"/>
+                </Grid>
+
+                <Rectangle Height="2">
+                  <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                      <GradientStop Color="Blue" Offset="0"/>
+                      <GradientStop Color="White" Offset="0.5"/>
+                      <GradientStop Color="Blue" Offset="1"/>
+                    </LinearGradientBrush>
+                  </Rectangle.Fill>
+                </Rectangle>
+                <local:BrushEditControl Grid.Row="0" Grid.ColumnSpan="2" 
+                                        IsExpanded="True"
+                                        Text="Brush" Brush="{Binding Path.Stroke, Mode=TwoWay}"/>
+              </StackPanel>
+            </Expander>
+          </Border>
+
+          <Border BorderBrush="Blue" BorderThickness="1" CornerRadius="5" Margin="1">
+            <local:BrushEditControl Grid.Row="0" Grid.ColumnSpan="2" 
+                                        IsExpanded="True"
+                                        Text="Fill brush" Brush="{Binding Path.Fill, Mode=TwoWay}"/>
+          </Border>
+
+          <Border BorderBrush="Blue" BorderThickness="1" CornerRadius="5" Margin="1">
+            <Border.Resources>
+              <DataTemplate DataType="{x:Type local:XDrawingLine}">
+                <Grid>
+                  <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="{x:Type TextBox}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </Grid.Resources>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="col0"/>
+                    <ColumnDefinition Width="*" SharedSizeGroup="col1"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Start point"/>
+                  <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path.Data.StartPoint}"/>
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="End point"/>
+                  <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path.Data.EndPoint}"/>
+                </Grid>
+              </DataTemplate>
+
+              <DataTemplate DataType="{x:Type local:XDrawingRectangle}">
+                <Grid>
+                  <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="{x:Type TextBox}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </Grid.Resources>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="col0"/>
+                    <ColumnDefinition Width="*" SharedSizeGroup="col1"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Width"/>
+                  <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Width}"/>
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Height"/>
+                  <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Height}"/>
+
+                  <TextBlock Grid.Row="2" Grid.Column="0" Text="Corner radius X"/>
+                  <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Path.Data.RadiusX}"/>
+
+                  <TextBlock Grid.Row="3" Grid.Column="0" Text="Corner radius Y"/>
+                  <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Path.Data.RadiusY}"/>
+                </Grid>
+              </DataTemplate>
+
+              <DataTemplate DataType="{x:Type local:XDrawingEllipse}">
+                <Grid>
+                  <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="{x:Type TextBox}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </Grid.Resources>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="col0"/>
+                    <ColumnDefinition Width="*" SharedSizeGroup="col1"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Radius X"/>
+                  <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path.Data.RadiusX}"/>
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Radius Y"/>
+                  <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path.Data.RadiusY}"/>
+                </Grid>
+              </DataTemplate>
+
+              <DataTemplate DataType="{x:Type local:XDrawingPath}">
+                <Grid>
+                  <Grid.Resources>
+                    <DataTemplate DataType="{x:Type PathFigure}">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Text="Figure" HorizontalAlignment="Center" Margin="3"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Is" Margin="3" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                          <CheckBox Content="closed" IsChecked="{Binding Path=IsClosed}" Margin="3"/>
+                          <CheckBox Content="filled" IsChecked="{Binding Path=IsFilled}" Margin="3"/>
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Start point" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=StartPoint}" Margin="3"/>
+                      </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type LineSegment}">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Text="Line segment" HorizontalAlignment="Center" Margin="3"/>
+
+                        <ToolBar Grid.ColumnSpan="2" Grid.Row="1">
+                          <RadioButton Width="24" Height="24" ToolTip="Line segment" Tag="LineSegment" IsChecked="True">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource LineSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Arc segment" Tag="ArcSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource ArcSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Bezier segment" Tag="BezierSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource BezierSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Quadratic bezier segment" Tag="QuadraticBezierSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource QuadraticBezierSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                        </ToolBar>
+
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Point" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Point}" Margin="3"/>
+                      </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type ArcSegment}">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Text="Arc segment" HorizontalAlignment="Center" Margin="3"/>
+
+                        <ToolBar Grid.ColumnSpan="2" Grid.Row="1">
+                          <RadioButton Width="24" Height="24" ToolTip="Line segment" Tag="LineSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource LineSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Arc segment" Tag="ArcSegment" IsChecked="True">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource ArcSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Bezier segment" Tag="BezierSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource BezierSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Quadratic bezier segment" Tag="QuadraticBezierSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource QuadraticBezierSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                        </ToolBar>
+
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Point" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Point}" Margin="3"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Size" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=Size}" Margin="3"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="4" Text="Large arc" Margin="3" VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="1" Grid.Row="4" IsChecked="{Binding Path=IsLargeArc}" Margin="3"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="5" Text="Sweep direction" Margin="3" VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="1" Grid.Row="5" Margin="3"
+                                  SelectedItem="{Binding Path=SweepDirection}" 
+                                  ItemsSource="{Binding Source={StaticResource sweepDirectionValues}}"/>
+                      </Grid>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type BezierSegment}">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Text="Bezier segment" HorizontalAlignment="Center" Margin="3"/>
+
+                        <ToolBar Grid.ColumnSpan="2" Grid.Row="1">
+                          <RadioButton Width="24" Height="24" ToolTip="Line segment" Tag="LineSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource LineSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Arc segment" Tag="ArcSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource ArcSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Bezier segment" Tag="BezierSegment" IsChecked="True">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource BezierSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Quadratic bezier segment" Tag="QuadraticBezierSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource QuadraticBezierSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                        </ToolBar>
+
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Point" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Point3}" Margin="3"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Control Point 1" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=Point1}" Margin="3"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="4" Text="Control Point 2" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding Path=Point2}" Margin="3"/>
+                      </Grid>
+                    </DataTemplate>
+
+
+                    <DataTemplate DataType="{x:Type QuadraticBezierSegment}">
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="Auto"/>
+                          <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                          <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Text="Quadratic bezier segment" HorizontalAlignment="Center" Margin="3"/>
+
+                        <ToolBar Grid.ColumnSpan="2" Grid.Row="1">
+                          <RadioButton Width="24" Height="24" ToolTip="Line segment" Tag="LineSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource LineSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Arc segment" Tag="ArcSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource ArcSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Bezier segment" Tag="BezierSegment" IsChecked="False" Click="PathSegmentTypeChange_Click">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource BezierSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                          <RadioButton Width="24" Height="24" ToolTip="Quadratic bezier segment" Tag="QuadraticBezierSegment" IsChecked="True">
+                            <RadioButton.Content>
+                              <Image Source="{StaticResource QuadraticBezierSegmentImage}"/>
+                            </RadioButton.Content>
+                          </RadioButton>
+                        </ToolBar>
+
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Point" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Point2}" Margin="3"/>
+
+                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Control Point" Margin="3" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding Path=Point1}" Margin="3"/>
+                      </Grid>
+                    </DataTemplate>
+                  </Grid.Resources>
+
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+
+                  <ToolBar Grid.Row="0">
+                    <Button Width="24" Height="24" ToolTip="Add new point before selected" Click="AddNewPathPtBefore_Click">
+                      <Button.Content>
+                        <Image Source="{StaticResource InsertPointBeforeImage}"/>
+                      </Button.Content>
+                    </Button>
+                    <Button Width="24" Height="24" ToolTip="Add new point after selected" Click="AddNewPathPtAfter_Click">
+                      <Button.Content>
+                        <Image Source="{StaticResource InsertPointAfterImage}"/>
+                      </Button.Content>
+                    </Button>
+                    <Separator/>
+                    <Button Width="24" Height="24" ToolTip="Delete selected point" Click="Button_Click">
+                      <Button.Content>
+                        <Image Source="{StaticResource DeletePointImage}"/>
+                      </Button.Content>
+                    </Button>
+                  </ToolBar>
+
+                  <ContentPresenter Grid.Row="1" Content="{Binding ElementName=tab, Path=SelectedItem.DataContext.Drawing.SelectedControlPoint.Tag}"/>
+                </Grid>
+              </DataTemplate>
+
+              <DataTemplate DataType="{x:Type local:XDrawingText}">
+                <Grid>
+                  <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="{x:Type TextBox}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                    <Style TargetType="{x:Type ComboBox}">
+                      <Setter Property="Margin" Value="3,1"/>
+                      <Setter Property="VerticalAlignment" Value="Center"/>
+                    </Style>
+                  </Grid.Resources>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="col0"/>
+                    <ColumnDefinition Width="*" SharedSizeGroup="col1"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Grid.Row="0" Grid.Column="0" Text="Text"/>
+                  <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Text}" 
+                           AcceptsReturn="True" AcceptsTab="True" MinLines="3" MaxLines="10" 
+                           HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+
+                  <TextBlock Grid.Row="1" Grid.Column="0" Text="Size"/>
+                  <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding TextSize}"/>
+
+                  <TextBlock Grid.Row="2" Grid.Column="0" Text="Font family"/>
+                  <ComboBox Grid.Row="2" Grid.Column="1" 
+                            ItemsSource="{Binding Source={x:Static Member=Fonts.SystemFontFamilies}}"
+                            SelectedItem="{Binding FontFamily}"/>
+
+                  <TextBlock Grid.Row="3" Grid.Column="0" Text="Alignment"/>
+                  <ComboBox Grid.Row="3" Grid.Column="1" 
+                            ItemsSource="{Binding Source={StaticResource textAlignmentValues}}"
+                            SelectedItem="{Binding Alignment}"/>
+
+                  <TextBlock Grid.Row="4" Grid.Column="0" Text="Trimming"/>
+                  <ComboBox Grid.Row="4" Grid.Column="1" 
+                            ItemsSource="{Binding Source={StaticResource textTrimmingValues}}"
+                            SelectedItem="{Binding Trimming}"/>
+
+                  <ToolBar Grid.Row="5" Grid.ColumnSpan="2">
+                    <CheckBox Width="24" Height="24" Initialized="BoldText_Initialized" DataContextChanged="BoldText_DataContextChanged" 
+                              Click="BoldText_Click">
+                      <CheckBox.Content>
+                        <TextBlock Text="B" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontFamily="Times new Roman" FontWeight="Bold"/>
+                      </CheckBox.Content>
+                    </CheckBox>
+                    <CheckBox Width="24" Height="24" Initialized="ItalicText_Initialized" DataContextChanged="ItalicText_DataContextChanged" 
+                              Click="ItalicText_Click">
+                      <CheckBox.Content>
+                        <TextBlock Text="I" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontFamily="Times new Roman" FontStyle="Italic"/>
+                      </CheckBox.Content>
+                    </CheckBox>
+                  </ToolBar>
+                </Grid>
+              </DataTemplate>
+            </Border.Resources>
+
+            <ContentPresenter Content="{Binding Path=.}"/>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+
+      <!-- Drawing area -->
+      <TabControl Grid.Column="1" x:Name="tab" SelectionChanged="tab_SelectionChanged"></TabControl>
+
+      <!-- XDraw project -->
+      <GridSplitter Grid.Column="2" HorizontalAlignment="Left" Width="3"/>
+      <Grid Grid.Column="2">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" BorderBrush="Blue" BorderThickness="1" CornerRadius="5" Margin="1" Padding="2">
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <ToolBar Grid.Row="0">
+              <Button Width="24" Height="24" ToolTip="Adds a new drawing" Click="AddDrawing_Click">
+                <Button.Content>
+                  <Image Source="{StaticResource AddImage}"/>
+                </Button.Content>
+              </Button>
+              <Separator/>
+              <Button Width="24" Height="24" ToolTip="Copies the selected drawing" Click="CopyDrawing_Click">
+                <Button.Content>
+                  <Image Source="{StaticResource CopyDrawingImage}"/>
+                </Button.Content>
+              </Button>
+              <Button Width="24" Height="24" ToolTip="Deletes the selected drawing" Click="RemoveDrawing_Click">
+                <Button.Content>
+                  <Image Source="{StaticResource RemoveImage}"/>
+                </Button.Content>
+              </Button>
+              <Separator/>
+              <Button Width="24" Height="24" ToolTip="Exports the selected drawing" Click="ExportDrawing_Click">
+                <Button.Content>
+                  <Image Source="{StaticResource ExportImage}"/>
+                </Button.Content>
+              </Button>
+              <Button Width="24" Height="24" ToolTip="Imports content to the selected drawing" Click="ImportDrawing_Click">
+                <Button.Content>
+                  <Image Source="{StaticResource ImportImage}"/>
+                </Button.Content>
+              </Button>
+            </ToolBar>
+
+            <TreeView Grid.Row="1" x:Name="projectTree" BorderThickness="0" MouseDoubleClick="projectTree_MouseDoubleClick">
+              <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                  <EventSetter Event="TreeViewItem.MouseRightButtonDown"
+                               Handler="TreeViewItem_MouseRightButtonDown"/>
+                </Style>
+              </TreeView.ItemContainerStyle>
+              <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type local:XDrawProject}" ItemsSource="{Binding Path=Drawings}">
+                  <StackPanel Orientation="Horizontal">
+                    <StackPanel.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem Header="Add drawing" Click="AddDrawing_Click">
+                          <MenuItem.Icon>
+                            <Image Height="16" Source="{StaticResource AddImage}"/>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                      </ContextMenu>
+                    </StackPanel.ContextMenu>
+
+                    <Image Height="16" Source="{StaticResource XDrawImage}" Margin="0,1,3,1" VerticalAlignment="Center"/>
+
+                    <TextBlock Text="Project '" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Path=ProjectName}" VerticalAlignment="Center"/>
+                    <TextBlock Text="'" VerticalAlignment="Center"/>
+                  </StackPanel>
+                </HierarchicalDataTemplate>
+
+                <HierarchicalDataTemplate DataType="{x:Type local:XProjectDrawing}">
+                  <StackPanel Orientation="Horizontal">
+                    <StackPanel.ContextMenu>
+                      <ContextMenu>
+                        <MenuItem Header="Copy drawing" Click="CopyDrawing_Click">
+                          <MenuItem.Icon>
+                            <Image Height="16" Width="16" Source="{StaticResource CopyDrawingImage}"/>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Remove drawing" Click="RemoveDrawing_Click">
+                          <MenuItem.Icon>
+                            <Image Height="16" Width="16" Source="{StaticResource RemoveImage}"/>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="Export drawing" Click="ExportDrawing_Click">
+                          <MenuItem.Icon>
+                            <Image Height="16" Width="16" Source="{StaticResource ExportImage}"/>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Import drawing" Click="ImportDrawing_Click">
+                          <MenuItem.Icon>
+                            <Image Height="16" Width="16" Source="{StaticResource ImportImage}"/>
+                          </MenuItem.Icon>
+                        </MenuItem>
+                      </ContextMenu>
+                    </StackPanel.ContextMenu>
+                    <Image Height="16" Width="16" Source="{StaticResource DrawingImage}" Margin="0,1,3,1" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Path=DrawingName}" VerticalAlignment="Center"/>
+                  </StackPanel>
+                </HierarchicalDataTemplate>
+              </TreeView.Resources>
+            </TreeView>
+          </Grid>
+        </Border>
+
+        <Border Grid.Row="1" BorderBrush="Blue" BorderThickness="1" CornerRadius="5" Margin="1">
+          <Expander IsExpanded="True" ExpandDirection="Up" Header="Properties">
+            <Grid>
+              <Grid.Resources>
+                <DataTemplate DataType="{x:Type local:XDrawProject}">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Project name" Margin="3,0" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=ProjectName}" Margin="3,0"
+                           ToolTip="{Binding Path=ProjectFilePath}"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="XAML path" Margin="3,0" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=XAMLFilePath}" Margin="3,0"
+                           ToolTip="Absolute or relative path of the exported XAML file with the ResourceDictionary"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Def. export format" Margin="3,0" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" Grid.Row="2" Margin="3,0" ToolTip="Export format for new created drawings"
+                            ItemsSource="{Binding Source={StaticResource exportFormatValues}}"
+                            SelectedItem="{Binding DefaultExportFormat}"/>
+                  </Grid>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type local:XProjectDrawing}">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Name" Margin="3,0" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=DrawingName}" Margin="3,0"
+                           ToolTip="Name of the drawing which is also used as Resource key in the ResourceDictionary"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Export format" Margin="3,0" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="3,0" ToolTip="Export format for the drawing"
+                            ItemsSource="{Binding Source={StaticResource exportFormatValues}}"
+                            SelectedItem="{Binding ExportFormat}"/>
+
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Drawing Size" Margin="3,0" VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=DrawingSize}" Margin="3,0"
+                           ToolTip="Size of the drawing area"/>
+
+                    <CheckBox Grid.ColumnSpan="2" Grid.Row="3" Margin="10,3,3,3" Content="Save Drawing size (Canvas only)" IsChecked="{Binding Path=SaveDrawingSize}"/>
+
+                  </Grid>
+                </DataTemplate>
+              </Grid.Resources>
+
+              <ContentPresenter Content="{Binding ElementName=projectTree, Path=SelectedItem}"/>
+            </Grid>
+          </Expander>
+        </Border>
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>
