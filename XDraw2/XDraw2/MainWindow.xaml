@@ -1,10 +1,11 @@
 ﻿<Window x:Class="XDraw.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avalonDock="http://avalondock.codeplex.com"
+        xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
         xmlns:xdEditor="clr-namespace:XDraw.Editor;assembly=XDraw.Editor"
         xmlns:xdCore="clr-namespace:XDraw;assembly=XDraw2.Core"
         xmlns:local="clr-namespace:XDraw"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
         Title="XDraw 2" Height="600" Width="800"
         Background="{StaticResource ToolBarTrayBackground}"
         Activated="Window_Activated"
@@ -12,7 +13,7 @@
 
   <Window.Resources>
     <local:ActiveDocumentConverter x:Key="ActiveDocumentConverter"/>
-    <avalonDock:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <xcad:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
   </Window.Resources>
 
   <Window.CommandBindings>
@@ -160,10 +161,7 @@
                                DocumentsSource="{Binding Path=Documents}"
                                AnchorablesSource="{Binding Path=ToolPanes}"
                                ActiveContent="{Binding Path=ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
-      <avalonDock:DockingManager.Theme>
-        <avalonDock:VS2010Theme/>
-      </avalonDock:DockingManager.Theme>
-
+     
       <avalonDock:DockingManager.LayoutItemTemplateSelector>
         <local:PanesTemplateSelector>
           <local:PanesTemplateSelector.DocumentTemplate>
